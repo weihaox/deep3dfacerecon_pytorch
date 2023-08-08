@@ -185,6 +185,7 @@ class BaseModel(ABC):
         """Return visualization images. train.py will display these images with visdom, and save the images to a HTML"""
         visual_ret = OrderedDict()
         for name in self.visual_names:
+            # print(getattr(self, name).size()) # torch.Size([1, 3, 224, 672])
             if isinstance(name, str):
                 visual_ret[name] = getattr(self, name)[:, :3, ...]
         return visual_ret

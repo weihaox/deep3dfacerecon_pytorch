@@ -185,21 +185,26 @@ class FaceReconModel(BaseModel):
 
     def compute_visuals(self):
         with torch.no_grad():
-            input_img_numpy = 255. * self.input_img.detach().cpu().permute(0, 2, 3, 1).numpy()
-            output_vis = self.pred_face * self.pred_mask + (1 - self.pred_mask) * self.input_img
+            # input_img_numpy = 255. * self.input_img.detach().cpu().permute(0, 2, 3, 1).numpy()
+            # output_vis = self.pred_face * self.pred_mask + (1 - self.pred_mask) * self.input_img
+            # output_vis_numpy_raw = 255. * output_vis.detach().cpu().permute(0, 2, 3, 1).numpy()
+            
+            # if self.gt_lm is not None:
+            #     gt_lm_numpy = self.gt_lm.cpu().numpy()
+            #     pred_lm_numpy = self.pred_lm.detach().cpu().numpy()
+            #     output_vis_numpy = util.draw_landmarks(output_vis_numpy_raw, gt_lm_numpy, 'b')
+            #     output_vis_numpy = util.draw_landmarks(output_vis_numpy, pred_lm_numpy, 'r')
+            
+            #     output_vis_numpy = np.concatenate((input_img_numpy, 
+            #                         output_vis_numpy_raw, output_vis_numpy), axis=-2)
+            # else:
+            #     output_vis_numpy = np.concatenate((input_img_numpy, 
+            #                         output_vis_numpy_raw), axis=-2)
+
+            # weihao: save the rendered image only
+            output_vis = self.pred_face
             output_vis_numpy_raw = 255. * output_vis.detach().cpu().permute(0, 2, 3, 1).numpy()
-            
-            if self.gt_lm is not None:
-                gt_lm_numpy = self.gt_lm.cpu().numpy()
-                pred_lm_numpy = self.pred_lm.detach().cpu().numpy()
-                output_vis_numpy = util.draw_landmarks(output_vis_numpy_raw, gt_lm_numpy, 'b')
-                output_vis_numpy = util.draw_landmarks(output_vis_numpy, pred_lm_numpy, 'r')
-            
-                output_vis_numpy = np.concatenate((input_img_numpy, 
-                                    output_vis_numpy_raw, output_vis_numpy), axis=-2)
-            else:
-                output_vis_numpy = np.concatenate((input_img_numpy, 
-                                    output_vis_numpy_raw), axis=-2)
+            output_vis_numpy = output_vis_numpy_raw
 
             self.output_vis = torch.tensor(
                     output_vis_numpy / 255., dtype=torch.float32

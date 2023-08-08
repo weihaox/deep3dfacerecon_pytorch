@@ -13,7 +13,6 @@ from util.util import genvalconf
 import torch.multiprocessing as mp
 import torch.distributed as dist
 
-
 def setup(rank, world_size, port):
     os.environ['MASTER_ADDR'] = 'localhost'
     os.environ['MASTER_PORT'] = port
